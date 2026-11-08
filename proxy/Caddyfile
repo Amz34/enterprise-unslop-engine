@@ -1,0 +1,10 @@
+:9090 {
+    # Route GitHub webhook payloads to webhook daemon
+    handle /webhook* {
+        reverse_proxy 127.0.0.1:9095
+    }
+    # Route dashboard and telemetry to dashboard server
+    handle /* {
+        reverse_proxy 127.0.0.1:9096
+    }
+}

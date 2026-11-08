@@ -1,0 +1,47 @@
+name: Enterprise UI Slop Quality Gate & Design Governance
+
+on:
+  pull_request:
+    branches: [main, master, staging]
+    paths:
+      - '**.html'
+      - '**.jsx'
+      - '**.tsx'
+      - '**.vue'
+      - '**.svelte'
+      - '**.css'
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
+
+jobs:
+  unslop-audit:
+    name: Redline Craft & Anti-Slop Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Enterprise Unslop Gate
+        uses: ./actions/unslop-gate
+        with:
+          target-path: '.'
+          fail-on-findings: 'true'
+          sarif-output: 'unslop-results.sarif'
+
+      - name: Upload Slop Audit SARIF to GitHub Security Tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: unslop-results.sarif
+          category: ui-craft-governance

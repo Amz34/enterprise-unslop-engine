@@ -1,0 +1,9 @@
+{
+  "name": "eslint-plugin-unslop",
+  "version": "1.0.0",
+  "description": "Enterprise ESLint rule suite for zero-slop UI craft and design consistency",
+  "main": "index.js",
+  "peerDependencies": {
+    "eslint": ">=7.0.0"
+  }
+}
