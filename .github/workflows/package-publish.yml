@@ -23,6 +23,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Lowercase Repository Owner
+        run: |
+          echo "OWNER_LC=${OWNER,,}" >> $GITHUB_ENV
+        env:
+          OWNER: '${{ github.repository_owner }}'
+
       - name: Build and Push Gateway Image
         uses: docker/build-push-action@v5
         with:
@@ -30,5 +36,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/enterprise-unslop-gateway:latest
-            ghcr.io/${{ github.repository_owner }}/enterprise-unslop-gateway:v1.0.0
+            ghcr.io/${{ env.OWNER_LC }}/enterprise-unslop-gateway:latest
+            ghcr.io/${{ env.OWNER_LC }}/enterprise-unslop-gateway:v1.0.0
